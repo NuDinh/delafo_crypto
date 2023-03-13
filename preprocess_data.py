@@ -6,10 +6,10 @@ def prepair_data(path,window_x,window_y):
     df = pd.read_csv(path)
     df['date'] = df.date.apply(pd.Timestamp)
 
-    df['dow'] = df.date.apply(lambda x: x.dayofweek)
+    # df['dow'] = df.date.apply(lambda x: x.dayofweek)
     ## just select working days
-    df = df[(df.dow<=4)&(df.dow>=0)]
-    df = df.drop(['dow'],axis=1)
+    # df = df[(df.dow<=4)&(df.dow>=0)]
+    # df = df.drop(['dow'],axis=1)
 
     df = df.pivot_table(index='date', columns='ticker')
 
@@ -17,8 +17,8 @@ def prepair_data(path,window_x,window_y):
     columns = df.close.columns[~df.close.iloc[-1].isna()]
     df = df.iloc[:, df.columns.get_level_values(1).isin(columns)]
 
-    df.volume = df.volume.interpolate(method='linear',limit_area='inside',limit_direction='both', axis=0)
-#     df.volume = df.volume.fillna(0)
+    # df.volume = df.volume.interpolate(method='linear',limit_area='inside',limit_direction='both', axis=0)
+    df.volume = df.volume.fillna(0)
     df.close = df.close.interpolate(method='linear',limit_area='inside',limit_direction='both', axis=0)
 
     close = df.close
